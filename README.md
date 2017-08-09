@@ -16,7 +16,7 @@
 [Arry.prototype](https://github.com/LiuYashion/blog/issues/7)
 
 ### es6
-[______](https://github.com/LiuYashion/blog/issues/12)
+[es6](https://github.com/LiuYashion/blog/issues/12)
 
 ### tips
 [常用方法](https://github.com/LiuYashion/blog/issues/8)
