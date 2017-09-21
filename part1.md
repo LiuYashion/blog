@@ -185,4 +185,32 @@ function ScopA(){
 
 
 ### 没有块级作用域
+- 声明变量
+  - var声明的变量会被自动添加到最接近的环境
+  - 变量提升，是提升声明，初始化代码不会提升
+  
+*此处需要多理解
+```
+(function(){
+  console.log(arguments)    //  [1,2,3,...]
+  console.log(typeof arguments.slice) //  undefined，argument是类数组
+  console.log(foo())        //  hi
+  console.log(typeof bar)   //  undefined
+  function foo(){
+    return 'hello'
+  }
+  var foo = 'wei',
+    bar = function(){
+      return 'hello world'
+    }
+
+  function foo(){
+    return 'hi'
+  }  
+
+  console.log(typeof bar) //  function
+  console.log(typeof foo) //  string
+})(1,2,3)
+```
+
 
