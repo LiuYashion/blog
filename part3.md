@@ -303,7 +303,35 @@ Person.prototype = {
 ```
 这样我们保证了方法是共享的，对于数组类型的修改，都是基于自身私有的
 
+
+
+# 继承
+
+## 原型链
+
+```javascript
+function SuperType(){
+  this.property = true
+}
+SuperType.prototype.getSuperValue = function(){
+  return this.property
+}
+
+function SubType(){
+  this.subproperty = false
+}
+SubType.prototype = new SuperType()
+SubType.prototype.getSubValue = function(){
+  return this.subproperty
+}
+
+var instance = new SubType()
+console.log( instance.getSuperValue() ) // true
 ```
+上面修改的一个地方就是
+```
+SubType.prototype = new SuperType()
 
-
-
+// SubType.prototype === subtype1.__proto__
+```
+*SubType.prototype本来指向SubType的实例，经过修改之后，指向了SuperType的实例。也就是说，SuperType中的方法，也存在于SubType.prototype中，在确定继承关系后，我们再给SubType.prototype添加方法，就相当于在继承了SuperType的基础上，又添加了新方法*
