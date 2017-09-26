@@ -327,11 +327,235 @@ SubType.prototype.getSubValue = function(){
 
 var instance = new SubType()
 console.log( instance.getSuperValue() ) // true
+
+
+
 ```
 上面修改的一个地方就是
-```
+```javascript
 SubType.prototype = new SuperType()
 
 // SubType.prototype === subtype1.__proto__
 ```
-*SubType.prototype本来指向SubType的实例，经过修改之后，指向了SuperType的实例。也就是说，SuperType中的方法，也存在于SubType.prototype中，在确定继承关系后，我们再给SubType.prototype添加方法，就相当于在继承了SuperType的基础上，又添加了新方法*
+
+
+
+*SubType.prototype本来指向SubType的实例，经过修改之后，指向了SuperType的实例*
+
+*也就是说，SuperType中的方法，也存在于SubType.prototype中，在确定继承关系后，我们再给SubType.prototype添加方法，就相当于在继承了SuperType的基础上，又添加了新方法*
+
+*这时当instance访问一个方法的时候，先访问SubType.prototype，如果依然没访问到，这时会顺着原型链继续访问，又会访问到new SuperType()，也就是SuperType的实例，这个实例可以通过supertype.__proto__访问到SuperType.prototype，也就能够访问到原型方法了*
+
+
+
+## 默认的原型
+- instanceof
+
+  用来测试实例与原型链中出现过的构造函数
+  ```javascript
+  console.log( instance instanceof Object    ) true
+  console.log( instance instanceof SuperType ) true
+  console.log( instance instanceof SubType   ) true
+  ```
+- isPrototypeOf()
+  ```javascript
+  console.log( Object.prototype.isPrototypeOf(instance)    ) true
+  console.log( SuperType.prototype.isPrototypeOf(instance) ) true
+  console.log( SubType.prototype.isPrototypeOf(instance)   ) true
+  ```
+  
+## 原型链的问题
+- 所有实例会共享其原型的引用类型属性
+- 子类无法在不影响其他实例的条件下，给超类的构造函数传递参数
+
+```javascript
+function SuperType(){
+  this.colors = ['red', 'blue', 'green', 'brown']
+}
+function SubType(){
+
+}
+
+SubType.prototype = new SuperType()
+
+var instanceA = new SubType()
+instanceA.colors.push('black')
+
+console.log(instanceA.colors)
+// ["red", "blue", "green", "brown", "black"]
+
+var instanceB = new SubType()
+console.log(instanceB.colors)
+
+// ["red", "blue", "green", "brown", "black"]
+```
+
+从上面可以知道，不同的实例，共享了new SubType()里面的引用类型
+
+## 借用构造函数的问题
+- 方法都写在构造函数中，所以函数虽一样但是都是不同实例
+- 在超类型原型中定义的方法，子类型也是不可见的，SubType和SuperType没有联系，也就访问不到了
+
+```javascript
+function SuperType(name){
+  this.name = name
+  this.colors = ['red', 'blue', 'green', 'brown'];
+  
+}
+SuperType.prototype.sayHi = function(){
+  console.log('hello~')
+}
+
+function SubType(){
+  SuperType.call(this)
+}
+
+var instanceA = new SubType()
+instanceA.colors.push('black')
+//  colors: ["red", "blue", "green", "brown", "black"]
+
+var instanceB = new SubType()
+//  colors: ["red", "blue", "green", "brown"]
+
+```
+
+所以我们需要：
+
+# *组合继承*
+组合继承避免了原型链和借用构造函数的缺点，结合了：
+- 原型链，实现了原型属性和方法（name，sayName）的继承
+- 借用构造函数，实现了对实例属性（colors）的继承
+- 而且使用instanceof，inPropertyOf也能够识别构造函数
+```javascript
+function SuperType(name){
+  this.name = name
+  this.colors = ['red', 'blue', 'green', 'brown'];
+  
+}
+SuperType.prototype.sayName = function(){
+  console.log(this.name)
+}
+
+function SubType(name, age){
+  SuperType.call(this, name)
+  this.age = age
+}
+SubType.prototype = new SuperType()
+SubType.prototype.sayAge = function(){
+  console.log(this.age)
+}
+
+var instanceA = new SubType('LYX', 18)
+instanceA.colors.push('black')
+//  age:    18
+//  name:   'LYX'
+//  colors: ["red", "blue", "green", "brown", "black"]
+
+var instanceB = new SubType('PYGZ', 22)
+//  age:    22
+//  name:   'PYGZ'
+//  colors: ["red", "blue", "green", "brown"]
+
+```
+
+# *原型式继承*
+在object内部，先创建了一个临时构造函数F()，然后把obj设置为它的原型，然后返回了构造函数F()的实例，这个新实例，相当于obj的浅复制
+
+*然而缺点显而易见，这个obj被当做原型共享，所以object里面的array数据也是共享的，一个实例push了，所有实例都会被影响*
+```javascript
+function object(obj){
+  function F(){}
+  F.prototype = obj
+  return new F()
+}
+
+// 同理的还有es5中的一个语法来规范原型式继承
+Object.create(obj)
+```
+
+# *寄生式继承*
+寄生模式主要考虑到对象不是自定义类型和构造函数的情况下，完成继承，任何能够返回新对象的函数，都适用于这种模式
+```javascript
+function createAnother(origin){
+  var clone = Object.create(origin)
+  clone.sayHi = function(){
+    console.log('hi')
+  }
+  return clone
+}
+```
+
+# *寄生组合式继承*
+我们不必为了指定子类型的原型而调用超类构造函数，我们需要的其实只是超类原型的一个副本，所以我们可以这样
+
+- 使用寄生式来继承超类型的原型（获得一个副本）
+- 然后再把结果赋给子类型的原型
+
+```javascript
+
+function inheritPrototype(subType, superType){
+  var prototype = Obejct.create(superType);
+  prototype.constructor = subType;
+  subType.prototype = prototype
+}
+
+
+function SuperType(name){
+  this.name = name
+  this.colors = ['red', 'blue']
+}
+SuperType.prototype.sayHi = function(){
+  console.log('Hi')
+}
+
+function SubType(name, age){
+  SuperType.call(this, name)
+  this.age = age
+}
+
+// SubType.prototype = new superType()
+// 如果调用上面的，我们会执行2次new superType()，从而给SubType原型添加上name和color
+// 其实这些是不需要的
+inheritPrototype(SubType, SuperType)
+
+SubType.prototype.sayAge = function(){
+  console.log(this.name)
+}
+
+```
+*这样我们只用调用一次superType构造函数，就是在实例化对象的时候*
+
+
+# ES6继承方式
+比较简单直观，从例子可以看出，能够覆盖父类方法，并且能够访问到父类方法
+```javascript
+
+  class Parents{
+    constructor(name){
+      this.name = name
+    }
+    parent(){
+      console.log('parents: ', this.name)
+    }
+    sayName(){
+      console.log('parents: ', this.name)
+    }
+  }
+
+  class Child extends Parents{
+    constructor(name, parentName){
+      super(parentName) // 表示调用父类的constructor
+      this.name = name
+    }
+    sayName(){
+      console.log('child：', this.name)
+    }
+  }
+
+  const child = new Child('son', 'father')
+  child.sayName() //  child： son
+  child.parent()  //  parents:  son
+
+  const parent = new Parents('father')
+  parent.sayName() // parents:  father
+```
