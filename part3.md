@@ -313,20 +313,23 @@ Person.prototype = {
 
 var personA = new Person('lyx', 20)
 ```
-这样我们保证了方法是共享的，对于数组类型的修改，都是基于自身私有的。即：age，name，friend都是在实例上，sayName是在原型链上
+这样我们保证了：
+- 方法是共享的，对于数组类型的修改，都是基于自身私有的，即：age，name，friend都是在实例上
+- sayName是在原型链上，实现了方法共享
 
 
 
 
+---
+## 继承
+新建对象的时候，我们知道，当前对象没找到属性时，会顺着原型链去访问。那既然这样，让超类的一个实例new SuperType()去做子类的原型SubType.prototype，这样基于该原型生成的子类实例，都能顺着原型链往超类访问了，也就实现了继承
 
+这里再次说明一遍：
 
-
-
-# 继承
-
+*prototype是函数的属性，在一个函数声明的时候，es就会为其添加一个prototype属性，里面有constructor指向（构造）函数，当然，属性的值是一个对象，_proto_也就不用说了，指向了Object。当这个函数被当做构造函数使用的时候，也就是new，【当我们使用new的时候，究竟js究竟干了什么】：我们把这个原型作为了新实例的超类，然后在新实例上调用了构造函数，也就是说：instance是SubType.prototype的子类，也就是new SuperType()的子类，也就是SuperType实例的子类，下面就是代码表述*
 ### 1.1 原型链
-
 ```javascript
+// 超类
 function SuperType(){
   this.property = true
 }
@@ -334,6 +337,7 @@ SuperType.prototype.getSuperValue = function(){
   return this.property
 }
 
+// 子类
 function SubType(){
   this.subproperty = false
 }
