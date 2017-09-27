@@ -1,10 +1,11 @@
-# 面向对象
-
-## 概念
+## 面向对象
 对象是一个无序属性的集合
 
-# 创建对象
-```
+### 1.1 创建对象
+我们可以通过下面2种方法创建对象
+- 构造函数
+- 对象字面量
+```javascript
 var personA  = new Object()
 personA.name = 'Koa' 
 personA.talk = function(){
@@ -19,47 +20,55 @@ var personB = {
 }
 ```
 
-# 属性类型
-es有2种属性：数据属性，访问器属性
+### 1.2 属性类型
+对象必定会有属性，es有2种属性：
+- 数据属性
+- 访问器属性
 
-## 数据属性
-数据属性有4个特性，
-
+### 1.2.1 数据属性
+比较常见的属性，数据属性有4个特性：
 - [[Configurable]]能否删除属性，修改属性特性
 - [[Enumerable]]能否被for-in遍历
 - [[Writable]]值能否被修改
 - [[Value]]数据值
 
-要修改属性默认的特性，必须用
+如果我们要修改数据属性的特性，那就就需要：
+> 一旦configurable设置为了false，就不能够再改回来，因为已经不允许修改属性了
 ```javascript
-Object.defineProperty(object, key, {
-    configurable: false
-    ....
+var person = {
+  name:'tom'
+};
+Object.defineProperty(person, name, {
+    writable: false
 })
 
+person.name = 'jery';
+console.log(emp.name);
 ```
-*一旦configurable设置为了false，就不能够再改回来*
 
 
-## 访问器属性
+### 1.2.2 访问器属性
 访问器属性也有4个特性：
-
 - [[Configurable]]
 - [[Enumerbale]]
 - [[Get]]读取属性时，调用的函数
 - [[Set]]写入属性时，调用的函数
 ```javascript
-Object.defineProperty(object, key, {
+var person = {
+　_name: 'tom',
+　_age: 20
+};
+Object.defineProperty(person, 'name', {
     get: function(){
-      return this._year
+      return this._name;
     },
-    set: function(newVal){
-      this._year = newVal
+    set: function(newName){
+      this._name = newName
     }
 })
 
 ```
-## 定义多个属性
+### 1.3定义多个属性
 
 ```javascript
 Object.defineProperties(book, {
