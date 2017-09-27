@@ -1,4 +1,5 @@
-## 面向对象
+
+## 创建
 对象是一个无序属性的集合
 
 ### 1.1 创建对象
@@ -33,7 +34,6 @@ var personB = {
 - [[Value]]数据值
 
 如果我们要修改数据属性的特性，那就就需要：
-> 一旦configurable设置为了false，就不能够再改回来，因为已经不允许修改属性了
 ```javascript
 var person = {
   name:'tom'
@@ -45,7 +45,7 @@ Object.defineProperty(person, name, {
 person.name = 'jery';
 console.log(emp.name);
 ```
-
+> *一旦configurable设置为了false，就不能够再改回来，因为已经不允许修改属性了*
 
 ### 1.2.2 访问器属性
 访问器属性也有4个特性：
@@ -68,8 +68,8 @@ Object.defineProperty(person, 'name', {
 })
 
 ```
-### 1.3定义多个属性
-
+### 1.3 定义多个属性
+批次定义多个属性，_year和edition是数据属性，year是访问器属性
 ```javascript
 Object.defineProperties(book, {
   _year: {
@@ -89,21 +89,23 @@ Object.defineProperties(book, {
 })
 ```
 
-## 读取属性的特性
-这个key只能调用自己的实例属性，想访问原型属性的描述符，就必须在原型对象上使用
+### 1.4 获取属性的特性
+只能获取自身的实例属性，想访问原型属性的描述符，就必须在原型对象上使用
 ```javascript
 Object.getOwnPropertyDescriptor(object, key)
 ```
 
+
+---
 ## 定义对象
-从上面可以看出，每创建一个对象，都要手写很多代码，So：
 
-- 工厂模式
-
-  尽管解决了创建问题，但是没解决对象的识别问题，我们不知道对象的类型
+从上面可以看出，每创建一个对象，都要手写很多代码，所以需要一种模式帮助我们创建对象
+ 
+### 2.1 工厂模式
+可以看出，工厂模式就是一个包装，尽管解决了创建问题，但是没解决对象的识别问题，我们不知道对象的类型（creatPerson）
 ```javascript
 function creatPerson(name, age, job){
-  var _p  = new Person();
+  var _p  = new Object();
   _p.name = name;
   _p.age  = age;
   _p.sayName = function(){
@@ -111,105 +113,108 @@ function creatPerson(name, age, job){
   }
   return _p
 }
+var person1 = new creatPerson('lyx', 18, 'code')
+
+// person1 instanceof creatPerson : false
 ```
 
-- 构造函数模式
-
-  Object，Array这种原生构造函数，是由运行环境提供，我们也可以自己写自定义构造函数
-
+### 2.2 构造函数模式
+类似于Object，Array这种由运行环境提供的原生构造函数，我们也可以自己写自定义构造函数
 ```javascript
-  function Person(name, age){
-    this.name = name;
-    this.age  = age;
-    this.sayName = function(){
-      alert(this.name)
-    }
-  }
-
-  var person1 = new Person('Clay', 18)
-```
-*对比发现，构造函数没有显式创建对象，直接把属性复制给this，没有return，当我们通过new 显式调用构造函数，会经历下面的过程*
-
-- *创建一个新对象*
-- *把构造函数的作用域赋给新对象*
-- *执行构造函数*
-- *返回新对象*
-
-*由前面可知，object都会有一个constructor属性，保存创建当前对象的函数，也就是Person*
-
-```javascript
-console.log( person instanceof Person )  // true  
-console.log( person instanceof Object )  // true  
-```
-
-## 关于构造函数
-
-- 使用构造函数
-  
-  构造函数使用起来，和普通函数没有什么区别
-
-- 构造函数的问题
-
-  其生成的每个对象，sayName对应的function是2个不同的实例，下面的方法可行，但是sayName被放在全局作用域下，没有封装性可言
-
-  ```javascript
-  function Person(name, age){
-    this.name = name;
-    this.age  = age;
-    this.sayName = sayName
-  }
-  function sayName(){
+function Person(name, age){
+  this.name = name;
+  this.age  = age;
+  this.sayName = function(){
     alert(this.name)
   }
-  var person1 = new Person('Clay', 18)
-  ```
+}
+var person1 = new Person('Clay', 18)
 
-## 原型模式
-原型模式很好的解决了这个问题
-```javascript
-  function Person(){
-
-  }
-
-  Person.prototype.name = 'Clay'
-  Person.prototype.age  = 18
-  Person.prototype.sayName = function(){
-    console.log(this.name)
-  }
-
-
-  var person1 = new Person()
-
-  // person1.__proto__ === Person.prototype
-  // person1.__proto__.constructor === Person
-  // Person.prototype.isPrototypeOf(person1) 
+console.log( person1 instanceof Person )  // true  
+console.log( person1 instanceof Object )  // true  
 ```
-*原型链的关系需要好好理解*
 
-当我们修改了实例上的属性name，即时设置为null，也无法访问到原型链中的同名属性，除非delete实例上的这个属性
+>  当我们执行new的时候，到底发生了什么？
+> ```javascript
+> var person1 = new Person('Clay', 18)
+> 
+> //JavaScript 实际上执行的是：
+> var person1 = new Object();  
+> person1.__proto__ = Person.prototype;
+> Person.call(person1, 'Clay', 18);
+> ```
+
+我们可以发现：构造函数没有显式创建对象，直接把属性复制给this，没有return。所以当我们通过new显式调用构造函数，会经历下面的过程：
+
+- 创建一个新对象(Object的实例)
+- 新对象的原型链指向了Person构造函数的原型
+- 把构造函数Person的作用域赋给新对象(this就指向了该对象)，执行构造函数(给this添加属性)
+- 返回新对象(赋值给person1)
 
 
-## 属性检测
-- 自己的属性为true，来自原型的为false
-  ```javascript
-  person1.hasOwnProperty('name') 
-  ```
+### 2.2.1 关于构造函数
+构造函数使用起来，和普通函数没有什么区别。同事构造函数还有一些问题：其生成的每个对象，sayName对应的function是2个不同的实例，下面的方法可行，但是sayName被放在全局作用域下，没有封装性可言：
+```javascript
+function Person(name, age){
+  this.name = name;
+  this.age  = age;
+  this.sayName = sayName
+}
+function sayName(){
+  alert(this.name)
+}
+var person1 = new Person('Clay', 18)
+```
 
-- 只要属性能够访问，就为true
-  ```javascript
-  console.log( 'name' in person1 )
-  ```
+> 由前面可知，object都会有一个constructor属性，这个属性指回构造函数，也就是Person
+> ```javascript
+> Person.constructor            //  ƒ Function(){}
+> person1.constructor           //  ƒ Person(name, age){..}
+> person1.__proto__.constructor //  ƒ Person(name, age){..}
+> ```
 
-- for-in，能遍历可枚举的实例属性和原型属性，所有开发人员定义的属性都是可枚举的
+## 2.0 先介绍一下prototype，__proto__，constructor
+每个函数都有prototype，对象都有__proto__
+
+创建函数的时候，js会自动为其添加prototype属性，值是一个空对象，既然是对象，那就会有constructor属性，这个属性要指回构造函数
 
 
-## 属性获取
-
+### 2.3 原型模式
+原型模式很好的解决了，function共享，代码不存放于全局的问题
 ```javascript
 function Person(){
 
 }
+Person.prototype.name = 'Clay'
+Person.prototype.age  = 18
+Person.prototype.sayName = function(){
+  console.log(this.name)
+}
+var person1 = new Person()
+// person1.__proto__ === Person.prototype
+// person1.__proto__.constructor === Person
+// Person.prototype.isPrototypeOf(person1) 
+```
+> 原型链的涉及到继承，属性访问当前对象没有，就会顺着原型链访问
 
+### 2.3.1 原型属性和实例属性
+当我们设置实例上的属性name，即时设置为null，也无法访问到原型链中的同名属性，设置的同事就已经屏蔽了原型上的属性，除非delete实例上的这个属性
+
+
+### 2.4 属性检测
+```javascript
+person1.hasOwnProperty('name')  // 自己的属性为true，来自原型的为false
+'name' in person1               // 只要属性能够访问，就为true
+```
+
+> for-in，能遍历可枚举的实例属性和原型属性，所有开发人员定义的属性都是可枚举的
+
+
+### 2.5 属性获取
+```javascript
+function Person(){
+
+}
 Person.prototype.name = 'Clay'
 Person.prototype.age  = 18
 Person.prototype.sayName = function(){
@@ -219,34 +224,20 @@ Person.prototype.sayName = function(){
 var person1 = new Person()
 person1.name = 'Lyx'
 
-```
-可枚举属性
-```javascript
+//  可枚举属性
+Object.keys(person1) // ["name"]
+Object.keys(Person.prototype) // ["name", "age", "sayName"]
+Object.keys(Person) // []
 
-Object.keys(person1)
-// ["name"]
-
-Object.keys(Person.prototype)
-// ["name", "age", "sayName"]
-
-Object.keys(Person)
-// []
-```
-
-不可枚举属性
-```javascript
-Object.getOwnPropertyNames(person1)
-// ["name", "age", "sayName"]
-
-Object.getOwnPropertyNames(Person.prototype)
-// ["constructor", "name", "age", "sayName"]
-
-Object.getOwnPropertyNames(Person)
-// ["length", "name", "arguments", "caller", "prototype"]
+//  不可枚举属性
+Object.getOwnPropertyNames(person1) // ["name", "age", "sayName"]
+Object.getOwnPropertyNames(Person.prototype) // ["constructor", "name", "age", "sayName"]
+Object.getOwnPropertyNames(Person) // ["length", "name", "arguments", "caller", "prototype"]
 ```
 
 
-## 更简单的原型模式
+### 2.6 更简单的原型模式
+每添加一个属性或者方法就要写，Person.prototype...，这样很繁杂，那就重新prototype吧
 ```javascript
 function Person(){
 
@@ -258,8 +249,12 @@ Person.prototype = {
     console.log(this.name)
   }
 }
+var person1 = new Person()
 ```
-但是这里，我们相当于对Person.prototype进行了重写，以前Person.prototype存储了Person，考虑到不能枚举，可以如下补充
+
+> 根究上面【当我们执行new的时候，到底发生了什么？】可知，person1.__proto__指向原型Person.prototype
+
+但是这里，我们相当于对Person.prototype进行了重写，这种z字面量创建的方式最终结果相同，然而漏了每个object都有的constructor属性，Person.prototype的constructor要指向构造函数Person
 
 ```javascript
 Object.defineProperty(Person.prototype, 'constructor', {
@@ -268,18 +263,17 @@ Object.defineProperty(Person.prototype, 'constructor', {
 })
 ```
 
-## 动态性问题
-因为根据动态原型链访问，所以对于原型链的修改能够在实例上体现，但是如果我们整体重写了prototype，实例就无法通过__proto__访问到了
-
-*person1.__proto__ === Person.prototype*
-
+### 2.7 动态性问题
+因为根据动态原型链访问，所以对于原型链的修改能够在实例上体现，但是如果我们整体重写了prototype，可能就会出现问题了
 ```javascript
-var friend = new Person()
+function Person(){
+
+}
+var friendA = new Person()
+
 Person.prototype.sayHi = function(){
   console.log('hi')
 }
-friend.sayHi() // fine
-
 Person.prototype = {
   name: 'Clay',
   age: 19,
@@ -287,15 +281,22 @@ Person.prototype = {
     console.log(this.name)
   }
 }
+friendA.sayName() // error
 ```
+这里sayHi可以继续访问，sayName不行，这样想：Person.prototype.sayHi使得我们向原型链中添加了sayHi方法，但是prototype的复写，并不会让复写对象被添加进去，仅仅只是指针指向的内存变了而已
 
-## 原生对象的原型
-Object，Array，String等，都是在其构造函数的原型(就是它的prototype)上定义了方法，如Array.prototype的sort()
+### 2.8 原生对象的原型
+Object，Array，String等，都是在其构造函数的原型上定义了方法，如Array.prototype的sort()
 
-## 原型对象的问题
+### 2.9 原型对象的问题
 对象属性可能的取值，基本类型还好，引用类型的修改（function的重写，array的push）就会影响到所有实例了
 
+
+
+
+---
 ## 那么，就组合使用构造函数模式和原型模式吧
+构造函数（代码不能复用，函数不能共享），原型模式（引用类型共享），那就各取所长吧 
 ```javascript
 function Person(name, age){
   this.name = name
@@ -309,14 +310,21 @@ Person.prototype = {
     console.log(this.name)
   }
 }
+
+var personA = new Person('lyx', 20)
 ```
-这样我们保证了方法是共享的，对于数组类型的修改，都是基于自身私有的
+这样我们保证了方法是共享的，对于数组类型的修改，都是基于自身私有的。即：age，name，friend都是在实例上，sayName是在原型链上
+
+
+
+
+
 
 
 
 # 继承
 
-## 原型链
+### 1.1 原型链
 
 ```javascript
 function SuperType(){
