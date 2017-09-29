@@ -588,7 +588,7 @@ SubType.prototype.sayAge = function(){
 
 我们为了指定子类原型，而调用超类构造函数其实是没有必要的，我们不需要colors和name，我们使用超类原型的副本就行了（参考new，我们只需要新建对象，设置好原型链，并不需要call(person)）。我们可以复制一份SuperType.prototype，然后设置好constructor为SubType就行了
 
-务必理解Object.create(target)，并非单纯的复制，而是创建一个object，它的原型链指向target
+务必理解Object.create(target)，以target为原型，而是创建一个object，即它的原型链指向target
 ```javascript
 
 function inheritPrototype(subType, superType){
