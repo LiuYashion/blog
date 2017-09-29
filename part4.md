@@ -17,6 +17,26 @@ var factorial = function f(num){
 ```
 
 ### 3.1 闭包
+
+
+```javascript
+function returnfunc (propertyName) {
+  return function (obj) {            
+    return obj[propertyName];         
+  };
+}
+
+var savefunc = returnfunc("name");    
+var result = savefunc({name:"Picasso"});
+alert(result);                      
+
+```
+
+
+
+
+
+
 闭包是有权访问另一个函数作用域中变量的函数
 > 多个执行上下文的变量对象构成的链表就叫做作用域链
 ### 3.1.1 没闭包的活动对象和变量对象
