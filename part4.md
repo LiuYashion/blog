@@ -17,73 +17,55 @@ var factorial = function f(num){
 ```
 
 ### 3.1 闭包
+这里表明如下几个对象和概念
 
+对象：
+  - 变量对象：执行上下文的创建阶段
+  - 活动对象：执行上下文的执行阶段，可以理解为被激活了的变量对象
+
+概念：
+  - 多个（执行上下文的变量对象构成的）链表就叫做作用域链
+  - 闭包是（有权访问另一个函数作用域中变量的）函数和他的作用域的结合
+
+阶段：
+  - 函数创建：这时候根据上下文，就已经定义好了变量对象
+  - 函数激活：这时候根据传入的参数，激活变量对象，使之变成活动对象
 
 ```javascript
-function returnfunc (propertyName) {
-  return function (obj) {            
-    return obj[propertyName];         
+function makeAdder(x) {
+  return function(y) {
+    return x + y;
   };
 }
 
-var savefunc = returnfunc("name");    
-var result = savefunc({name:"Picasso"});
-alert(result);                      
+var add5 = makeAdder(5);
+var add10 = makeAdder(10);
 
+console.log(add5(2));  // 7
+console.log(add10(2)); // 12
 ```
+通过上面这段代码可以看出，5和10被保存在了闭包之中。add5和add10就是闭包，他们不仅保存了makeAdder中的匿名函数，还保存了不同的环境。
+
+## 这样的原因是：
+因为匿名函数对makeAdder的活动对象有引用，所以当makeAdder执行环境销毁的时候，他的活动对象却没有被销毁，所以这个活动对象依旧在内存中。从而形成了闭包。在调用函数的时候，根据传入的参数，我们会激活变量对象，所以add5和add10的激活出来的活动变量不同。
 
 
+function createFunctions(){
+var result = new Array();
+for (var i=0; i < 10; i++){
+result[i] = function(i){
+return function(){
+return i;
 
-
-
-
-闭包是有权访问另一个函数作用域中变量的函数
-> 多个执行上下文的变量对象构成的链表就叫做作用域链
-### 3.1.1 没闭包的活动对象和变量对象
-> 这里我们先来分析，声明并调用一个函数的时候，究竟发生了什么，先普及几个概念：
-> - 活动对象：正在被执行和引用的对象
-> - 变量对象：执行环境中包含所有变量和函数的对象
-> - 作用域链：多个执行上下文的变量对象构成的链表就叫做作用域链
-> - scope：保存当前上下文的变量对象
-```javascript
-function compare(value1, value2){
-  if(value1 < value2){
-    return -1
-  }else if(value1 > value2){
-    return 1
-  }else{
-    return 0
-  }
+};
+}(i);
 }
-var result = compare(5, 10)
-```
-> 当函数第一次被调用的时候，会：
-> - 创建一个执行环境和相应的作用域链，并且把作用域链赋值给内部属性[[scope]]（1）
-> - 使用this，arguments等参数，初始化函数的 *活动对象*
-
-全局的对象变量始终存在，但是像compare()这样局部环境的变量对象，则只在函数执行的过程中存在，（1）中可知，创建compare()函数的时候，会为函数创建一个执行环境，然后构建起执行环境的作用域链，此后，作用域的前端又有了一个活动对象（因为有value1和value2），所以这里的活动对象和变量对象是一样的
-
-
-### 3.1.1 有闭包的活动对象和变量对象
-> 在函数A内部定义函数B，会把A的 *活动对象* 添加到B的作用域链，所以下面代码中，内部匿名函数的作用域链中，会包含createComparisonFunction的活动对象。
-
-当匿名函数从createComparisonFunction中返回后，他的作用域链被初始化为活动对象，然后赋值给全局变量对象，这样匿名函数就能访问createComparisonFunction中定义的变量。
-
-这时候虽然createComparisonFunction的执行环境的作用域链被销毁了，但是他的活动对象不会被销毁，因为匿名函数的作用域链仍然在引用这个活动对象，除非这个匿名函数被销毁了，才会施放内存
-
-```javascript
-function createComparisonFunction(propertyName){
-  return function(object1, object2){
-    var value1 = object1[propertyName]
-    var value2 = object2[propertyName]
-  }
-
-  if(value1 < value2){
-    return -1
-  }else if(value1 > value2){
-    return 1
-  }else{
-    return 0
-  }
+return result;
 }
-```
+
+
+
+
+
+
+
