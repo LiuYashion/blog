@@ -51,5 +51,16 @@ entry: {
   pageThree: './src/pageThree/index.js'
 }
 ```
-如上面代码中，我们可以构建多页面应用。多页面应用就会涉及代码复用问题，我们可以用 CommonsChunkPlugin 提取公共代码， 具体使用见 --webpack缓存的持久化--
+如上面代码中，我们可以构建多页面应用。多页面应用就会涉及代码复用问题，我们可以用 CommonsChunkPlugin 提取公共代码， 具体使用见：webpack缓存的持久化
 
+### output
+```javascript
+output: {
+    publicPath: '',
+    path: path.resolve(__dirname, './build'),
+    // pathinfo: true,
+    filename: '[name]/entry.[chunkhash].js',
+    chunkFilename:'js/[name].chunk.js' //require.ensure
+},
+```
+webpack可以构建多种target项目，target不用，内部一些处理也会不用，默认是web
