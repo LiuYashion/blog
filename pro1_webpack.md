@@ -6,24 +6,28 @@
 ## 配置
 webapck.config.js
 
+---
 ### devtool
 ```javascript
 devtool: 'cheap-module-source-map',
 ```
 用于提高debug效率，具体选择可见 https://doc.webpack-china.org/configuration/devtool/#devtool
 
+---
 ### context
 ```javascript
 context: path.resolve(__dirname, 'src'),
 ```
 此处填写绝对路径，默认值为当前目录，作为entry和loader的起点目录。建议传一个值，这样能够使项目独立于当前执行目录
 
+---
 ### target
 ```javascript
 target: 'web',
 ```
 webpack可以构建多种target项目，target不用，内部一些处理也会不用，默认是web
 
+---
 ### entry
 entry是项目开始编译的入口，可以是单入口和多入口
 
@@ -53,14 +57,194 @@ entry: {
 ```
 如上面代码中，我们可以构建多页面应用。多页面应用就会涉及代码复用问题，我们可以用 CommonsChunkPlugin 提取公共代码， 具体使用见：webpack缓存的持久化
 
+---
 ### output
 ```javascript
 output: {
-    publicPath: '',
-    path: path.resolve(__dirname, './build'),
-    // pathinfo: true,
-    filename: '[name]/entry.[chunkhash].js',
-    chunkFilename:'js/[name].chunk.js' //require.ensure
+  publicPath: '',
+  path: path.resolve(__dirname, './build'),
+  // pathinfo: true,
+  filename: '[name]/entry.[chunkhash:8].js',
+  chunkFilename: 'js/[name].chunk.js' //require.ensure
 },
 ```
-webpack可以构建多种target项目，target不用，内部一些处理也会不用，默认是web
+output对应编译后文件的出口，当资源放到CDN时，可以使用publicPath来修改对应路径，默认时可留空。path就对应的输出路径。filename中的[name]对应的是entry中对象的key（index，entry1）。[chunkhash:8]对应的是文件的8位hash值。这里的chunkFilename对应的是独立打包出来的文件，这里的name对应的是不同chunk的hash，使用好了可以实现长缓存
+
+---
+### module
+针对非js文件，可以在module中使用对应的loader进行加加载
+
+- jsx | js 
+```javascript
+{
+  test: /\.es6|jsx|js$/,
+  exclude: /node_modules/,
+  loaders: ['jsx-loader', 'babel-loader'],
+}
+```
+处理react文件和转义es6
+
+- html
+```javascript
+{
+  test: /\.html$/,
+  loader: 'html-loader',
+}
+```
+处理react文件和转义es6
+
+- css
+```javascript
+{
+  test: /\.css$/,
+  include: path.resolve(__dirname, 'node_modules'),
+  use: ExtractTextPlugin.extract({
+    use: 'css-loader'
+  })
+},
+```
+ExtractTextPlugin用于将css文件区别于js文件，独立打包。这里考虑到引用的第三方库中的样式文件。
+
+- scss私有样式
+```javascript
+{
+  test: /\.scss$/,
+  include: path.resolve(__dirname, './'),
+  use: ExtractTextPlugin.extract({
+      use: [{
+            loader: 'css-loader',
+            options: {
+                modules: true,
+                importLoaders: 1,
+                localIdentName:'[local]___[hash:base64:5]'
+            }
+        },{
+            loader: 'postcss-loader',
+            options: PostCss
+        }
+      ]
+  })
+}
+```
+一些私有scss文件，可以使用css-loader的module方法，对样式名字进行修改，如下，给class加上hash能避免全局污染，具体scss文件写法，请见----
+
+如果是共有scss文件，使用ppostcss-scss加载即可
+```javascript
+import styles from './index.scss';
+//...
+render(){
+  return <div className={styles.picker}>
+}
+```
+
+```css
+.clicker{
+  opacity: 0.5;
+  color: #333333;
+}
+.clicker___2w8nl{
+  opacity: 0.5;
+  color: #333333;
+}
+```
+
+- png | jpg | gif | svg
+```javascript
+{
+  test: /\.(png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
+  loader: 'url-loader',
+  exclude: svgDirs,
+  options: {
+    limit: 15000
+  }
+},
+```
+url-loader
+
+
+---
+### externals
+```javascript
+externals:{
+  jquery: 'window.jQuery',
+},
+```
+通过配置externals，我们将依赖的库配置到全局变量，从而不再打包这个库。比如jquery，我们在html模板中引入了cdn，在项目中直接使用require('jquery')就行了。
+
+
+
+---
+### resolve
+```javascript
+resolve:{
+  modules: [ 'node_modules', path.resolve(__dirname, 'src') ],
+  extensions: ['.web.js', '.js', '.jsx', '.es6', '.json'],
+  alias: {
+    app: path.resolve(__dirname,'src/js'),
+    style: path.resolve(__dirname,'src/styles')
+  }
+},
+```
+resolve用于告知webpack自己定制的某些解析细节
+- alias
+
+  给import和require创建别名，使得引入文件变得更加简单，（别名只能在js文件中使用）
+- extensions
+
+  定义文件默认拓展名，引入文件时可以不带拓展
+- modules
+
+  定义webpack解析模块时的搜索目录
+
+
+
+---
+### plugins
+插件提供了一些额外的功能，帮助我们完成打包优化
+```javascript
+plugins: [
+    new UglifyJSPlugin(),
+    // 压缩js的插件
+
+    new CleanWebpackPlugin(['build'], {
+        root: path.resolve(__dirname),
+        verbose: true,
+        dry: false
+    }),
+    // 每次打包前清理build文件夹
+
+    new webpack.BannerPlugin({
+        banner: "@LiuYaxiong"
+    }),
+    // 给每个打包的文件顶部加一个注释
+    
+    new webpack.DefinePlugin({
+        "process.env": {
+            NODE_ENV: JSON.stringify("production")
+        }
+    }),
+    // 定义环境变量
+
+    new webpack.HashedModuleIdsPlugin(),
+    // 稳定chunk的hash值，便于实现长缓存
+
+    new webpack.optimize.CommonsChunkPlugin({
+        name: 'commons',     
+        filename: '[name]/bundle.[hash].js',
+        minChunks: 4,
+    }),
+    // 提取公共chunk的插件，超过4个地方引用了某文件后，就会把这个文件单独打包
+
+    new HtmlWebpackPlugin({
+        title:'开发模式',
+        filename: `.[name]/index.html`,
+        template: `./index.html`,
+        chunks: ['webpack-runtime', 'commons', 'index', 'entry1'],
+        inject: 'body',
+        hash: true, 
+        xhtml: true,
+    }), 
+    // 生成html的插件，帮助给模板加入js和css引用。chunk中引用的对应的是entry对象中的key，多页面应用中可以使用，单页面应用不需写chunks，默认会引入js和css
+]
+```
+
