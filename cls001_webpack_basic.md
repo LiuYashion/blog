@@ -245,6 +245,9 @@ plugins: [
         xhtml: true,
     }), 
     // 生成html的插件，帮助给模板加入js和css引用。chunk中引用的对应的是entry对象中的key，多页面应用中可以使用，单页面应用不需写chunks，默认会引入js和css
+
+    new ExtractTextPlugin('styles.[contenthash].css')
+    // 将css单独抽出来打包，用到的css全部被放在一个文件里
 ]
 ```
 
