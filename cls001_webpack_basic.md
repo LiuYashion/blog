@@ -120,13 +120,24 @@ ExtractTextPlugin用于将css文件区别于js文件，独立打包。这里考�
             }
         },{
             loader: 'postcss-loader',
-            options: PostCss
+            options: {
+              plugins: [
+                require('precss'),
+                require('autoprefixer')({
+                    browsers: [
+                        "> 1%",
+                        "last 5 versions",
+                        "ie 6"
+                    ]
+                }),
+              ]
+            }
         }
       ]
   })
 }
 ```
-一些私有scss文件，可以使用css-loader的module方法，对样式名字进行修改，如下，给class加上hash能避免全局污染，具体scss文件写法，请见----
+一些私有scss文件，可以使用css-loader的module方法，对样式名字进行修改，如下。同时使用post-css，能够自动补全需兼容的样式，给class加上hash能避免全局污染，具体scss文件写法，请见----
 
 如果是共有scss文件，使用ppostcss-scss加载即可
 ```javascript
@@ -202,6 +213,15 @@ resolve用于告知webpack自己定制的某些解析细节
 ### plugins
 插件提供了一些额外的功能，帮助我们完成打包优化
 ```javascript
+
+const UglifyJSPlugin        = require('uglifyjs-webpack-plugin')
+const CleanWebpackPlugin    = require("clean-webpack-plugin");
+const ExtractTextPlugin     = require('extract-text-webpack-plugin');
+const autoprefixer          = require('autoprefixer');
+const HtmlWebpackPlugin     = require('html-webpack-plugin');
+const OptimizeCSSPlugin     = require('optimize-css-assets-webpack-plugin');
+const PostCss               = require('./postcss.config.js')
+
 plugins: [
     new UglifyJSPlugin(),
     // 压缩js的插件
@@ -212,6 +232,9 @@ plugins: [
         dry: false
     }),
     // 每次打包前清理build文件夹
+
+    new OptimizeCSSPlugin(), 
+    // 压缩css文件
 
     new webpack.BannerPlugin({
         banner: "@LiuYaxiong"
