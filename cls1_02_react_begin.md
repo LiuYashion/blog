@@ -1,3 +1,21 @@
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+好好搞定出下面这些奇奇怪怪的用法
+```javascript
+import { HeadNav } from '../component'
+
+export { default as LoginView } from './LoginView.jsx';
+
+class LoginView extends Component {
+  render() {
+    return(<div>
+      999999999999999
+    </div>)
+  }
+}
+export default LoginView
+```
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 ### 从index.js开始(这里以SPA介绍)
 ---
 webpack的配置已经完成，index.js入口文件代码如下：
