@@ -47,3 +47,30 @@ document.getElementById('myBtn').addEventListener('click', handler， true)
 //  取消
 document.getElementById('myBtn').removeEventListener('click', handler, false)
 ```
+
+## 事件对象
+当在dom上触发某个事件的时候，会产生一个event对象
+
+### DOM中的事件对象
+浏览器会传入一个event对象到事件处理程序中
+```javascript
+//  设置
+document.getElementById('myBtn').onclick = function(event){
+  console.log(event.type) //  click
+}
+```
+
+### 事件对象的属性
+```javascript
+$('#myBtn').onclick = function(event){
+  event.bubbles           // 表明事件是否冒泡
+  event.cancelable        // 表明是否可以取消事件的默认行为
+  event.defaultPrevented  // 调用preventDefault就为true
+  preventDefault()        // 取消事件的默认行为
+  stopImmediatePropagation()  // 取消事件的就进一步捕获或冒泡，同事组织任何事件
+  stopPropagation() // 取消事件的就进一步捕获或冒泡
+
+}
+
+
+```
