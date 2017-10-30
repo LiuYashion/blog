@@ -31,7 +31,7 @@
           333333333
           <div id="d4">444444444
             <div id="d5">
-              <input id='d6'/>
+              
             </div>
           </div>
         </div>
@@ -39,40 +39,9 @@
     </div>
     <script>
       
-      document.addEventListener('readystatechange', function(e){
-        console.log(document.readyState)
+      document.addEventListener('click', function(e){
+        console.log(e.target)
       })
-
-      // document.getElementById('d6').addEventListener('input', function(e){
-      //   console.log(e.inputMethod)
-      // })
-
-
-
-
-
-      // var one   = document.getElementById('d1');
-      // var two   = document.getElementById('d2');
-      // var three = document.getElementById('d3');
-      // var four  = document.getElementById('d4');
-
-      // var useCapture = true; 
-
-      // //  true为捕获获取   【父级元素先触发】
-      // //  false为冒泡获取  【目标元素先触发】    
-      
-      // one.addEventListener('click', function() {
-      //     console.log(`useCapture: ${useCapture}`, ' | from 1');
-      // }, useCapture);
-      // two.addEventListener('click', function() {
-      //     console.log(`useCapture: ${useCapture}`, ' | from 2');
-      // }, useCapture);
-      // three.addEventListener('click', function() {
-      //     console.log(`useCapture: ${useCapture}`, ' | from 3');
-      // }, useCapture);
-      // four.addEventListener('click', function() {
-      //     console.log(`useCapture: ${useCapture}`, ' | from 4');
-      // }, useCapture); 
 
     </script>
 </html>

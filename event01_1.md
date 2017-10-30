@@ -206,6 +206,27 @@ document.body.onclick = function(e){
 
 ## HTML5事件
 
+### beforeunload
+在页面即将卸载时触发
+```javascript
+window.addEventListener('beforeunload', function(e){
+  console.log('---')
+  var message = '啊啊啊啊啊啊啊啊啊啊'
+  e.returnValue = message
+  return message
+})
+```
+
+
+### DOMContentLoaded
+页面已加载完毕就触发，
+```javascript
+window.addEventListener('DOMContentLoaded', function(e){
+  //  do sth
+})
+```
+
+
 ### readystateChange
 dom准备的几个就阶段
 - loading
@@ -217,4 +238,33 @@ dom准备的几个就阶段
 document.addEventListener('readystatechange', function(e){
   console.log(document.readyState)
 })
-``
+```
+
+
+### hashChange
+这个时间添加给window对象，event里面包含：oldURL, newURL, 
+```javascript
+window.addEventListener('hashchange', function(e){
+  console.log(e)
+})
+```
+
+### 事件委托
+对时间处理过多的解决方案就是：事件委托。利用事件冒泡，只指定一个程序，来管理某一类型的所有事件。比如click，一直冒泡到document层次，这样我们可以为整个页面执行一个click事件，而不必给每一个元素绑定
+```javascript
+document.addEventListener('click', function(e){
+  console.log(e.target)
+  // switch...
+})
+```
+
+### 移除事件处理程序
+
+
+
+
+
+
+
+
+
