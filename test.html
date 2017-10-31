@@ -1,12 +1,7 @@
 <html>
 
 <head>
-    <script>
-    document.addEventListener('readystatechange', function(e){
-      console.log(document.readyState)
-    })
-
-    </script>
+    <script src="./pro/monoevent.ejs"></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui">
     <meta content="yes" name="apple-mobile-web-app-capable">
@@ -23,29 +18,15 @@
       }
     </style>
 <body>
-    <div id="d1">
-      1111111111
-      <div id="d2">
-        222222222
-        <div id="d3">
-          333333333
-          <div id="d4">444444444
-            <div id="d5">
-              
-            </div>
-          </div>
-        </div>
-      </div>
+    <div id="d5" class="d5">
+      55555555
     </div>
     <script>
+     
+      MonoEvent('.d5').one('tap', (e)=>{
+        console.log(e)
+      })
       
-      function handlePesponse(response){
-        alert('your ip address: ' + response.ip + ', city: ' + response.city + ' , ' + response.region_name)
-      }
       
-      var script = document.createElement('script')
-      script.src = 'http://freegeoip.net/json/?callback=handlePesponse'
-      document.body.insertBefore(script, document.body.firstChild)
-
     </script>
 </html>
