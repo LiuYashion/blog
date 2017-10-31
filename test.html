@@ -39,9 +39,13 @@
     </div>
     <script>
       
-      document.addEventListener('click', function(e){
-        console.log(e.target)
-      })
+      function handlePesponse(response){
+        alert('your ip address: ' + response.ip + ', city: ' + response.city + ' , ' + response.region_name)
+      }
+      
+      var script = document.createElement('script')
+      script.src = 'http://freegeoip.net/json/?callback=handlePesponse'
+      document.body.insertBefore(script, document.body.firstChild)
 
     </script>
 </html>
