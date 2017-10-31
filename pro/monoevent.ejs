@@ -1002,6 +1002,8 @@
 
       MonoEvent.prototype[item.methodName] = function (type, selector, extraData, fn, one) {
 
+        //  MonoEvent('.d5').one( 'tap', (e)=>{console.log(e)} )
+        //  this.on(type, selector, extraData, fn, true);
         var types = type.match(/[^\s]+/g),
           len = types.length,
           isOn = item.methodName === 'on',
@@ -1010,6 +1012,8 @@
           i = 0,
           special, dataName, originalFn;
 
+        console.log(type)
+
         if (len === 1) {
           type = types[0];
           types = type.split('.');
@@ -1017,10 +1021,8 @@
           options.namespace = types[1];
           special = eventHooks[type];
           dataName = type;
-        }
-        
-        // 多个事件类型循环绑定或卸载
-        else {
+        } else {
+          // 多个事件类型循环绑定或卸载
           for (; i < len; i++) {
             this[isOne ? 'one' : item.methodName](types[i], selector, extraData, fn);
           }
@@ -1089,6 +1091,10 @@
 
     });
 
+
+
+
+
     MonoEvent.prototype.fire = function (type, fireData) {
       var types = type.split('.'),
         namespace = types[1],
@@ -1112,6 +1118,9 @@
     };
 
     MonoEvent.prototype.one = function (type, selector, extraData, fn) {
+
+      // MonoEvent('.d5').one( 'tap', (e)=>{console.log(e)} )
+
       return this.on(type, selector, extraData, fn, true);
     };
 
