@@ -1,7 +1,8 @@
 <html>
 
 <head>
-    <script src="./pro/monoevent.ejs"></script>
+    <script src="./pro/zepto.ejs"></script>
+    <script src="./pro/touch.ejs"></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui">
     <meta content="yes" name="apple-mobile-web-app-capable">
@@ -13,7 +14,7 @@
     <title>循环贷Task</title>
     <style>
       div{
-        background: rgba(173, 173, 173, 0.288);
+        background: rgba(134, 55, 55, 0.288);
         padding: 50px;
       }
     </style>
@@ -21,12 +22,22 @@
     <div id="d5" class="d5">
       55555555
     </div>
+    <div class="d5"></div>
+    <div class="d5"></div>
     <script>
-     
-      MonoEvent('.d5').one('tap', (e)=>{
-        console.log(e)
+      
+
+      Zepto('#d5').tap(function(){
+        console.log('-----')
       })
       
+      // MonoEvent('.d5')
+
+      // MonoEvent(document.getElementById('d5')).on('tap', (e) => {
+      //   console.log('callback ~')
+      // })
+
+      // MonoEvent(document.getElementsByClassName('d5')) 
       
     </script>
 </html>
