@@ -965,10 +965,7 @@ window.$ === undefined && (window.$ = Zepto)
 //  事件模块
 ;(function($){
 
-  //  handler对象
-  //  {
-  //    1:[{},{},{}]  //每个事件对应一个对象，对象里包含回调函数，选择器等属性
-  //  }
+  
   //  如果给body注册了3个事件，那么handler就像上面的那种
 
   var _zid = 1, 
@@ -977,34 +974,44 @@ window.$ === undefined && (window.$ = Zepto)
     isFunction = $.isFunction,
     isString = function(obj){ return typeof obj == 'string' },
     handlers = {},
+    //  handler对象
+    //  {
+    //    1:[{},{},{}]  //每个事件对应一个对象，对象里包含回调函数，选择器等属性
+    //  }
+
     specialEvents={},
     focusinSupported = 'onfocusin' in window,
     focus = { focus: 'focusin', blur: 'focusout' },
     hover = { mouseenter: 'mouseover', mouseleave: 'mouseout' }
     specialEvents.click = specialEvents.mousedown = specialEvents.mouseup = specialEvents.mousemove = 'MouseEvents'
 
-  //  传入元素，给它赋予zid，如果没有就自增一个，保证每个元素的zid都是唯一的
+  //~~~  传入元素，返回zid，如果没有就自增一个，保证每个元素的zid都是唯一的
   function zid(element) {
     return element._zid || (element._zid = _zid++)
   }
-  //  用来在handlers中寻找某个元素对应的事件数组，我们可能绑定的方法为：$('body').on('click.name',fn)
+  //~~~  用来在handlers中寻找某个元素对应的事件数组，我们可能绑定的方法为：$('body').on('click.name',fn)
   function findHandlers(element, event, fn, selector) {
+    //~~~ event : {e: "click", ns: "message modal"}
     event = parse(event)
-    if (event.ns) var matcher = matcherFor(event.ns)
+    //~~~  如果有命名空间就返回匹配正则
+    if (event.ns) {
+      var matcher = matcherFor(event.ns)
+    }
+    //~~~  传入element，筛选handlers，返回handler(handler在add函数中得到处理)
     return (handlers[zid(element)] || []).filter(function(handler) {
-      return handler
+      return handler 
         && (!event.e  || handler.e == event.e)
         && (!event.ns || matcher.test(handler.ns))
         && (!fn       || zid(handler.fn) === zid(fn))
         && (!selector || handler.sel == selector)
     })
   }
-  //  解析注册事件时的字符串，同事解析命名空间 parse('click.message.modal')  返回{e: "click", ns: "message modal"}
+  //~~~  解析注册事件时的字符串，同事解析命名空间 parse('click.message.modal')  返回{e: "click", ns: "message modal"}
   function parse(event) {
     var parts = ('' + event).split('.')
     return {e: parts[0], ns: parts.slice(1).sort().join(' ')}
   }
-  //  生成命名空间的正则表达式
+  //~~~  生成命名空间的正则表达式
   function matcherFor(ns) {
     return new RegExp('(?:^| )' + ns.replace(' ', ' .* ?') + '(?: |$)')
   }
@@ -1018,21 +1025,36 @@ window.$ === undefined && (window.$ = Zepto)
   function realEvent(type) {
     return hover[type] || (focusinSupported && focus[type]) || type
   }
-  //  注册关键逻辑(监听的元素，注册的时间列表，回调函数，附加数据对象，监听的元素的事件选择器，委托函数。标识事件捕获的bool值)
+  //~~~  注册关键逻辑
+  //~~~  - 监听的元素
+  //~~~  - 注册的时间列表
+  //~~~  - 回调函数
+  //~~~  - 附加数据对象
+  //~~~  - 监听的元素的事件选择器
+  //~~~  - 委托函数
+  //~~~  - 标识事件捕获的bool值
   function add(element, events, fn, data, selector, delegator, capture){
-    //  返回_zid，保存该元素事件信息对象的数组
+    //~~~  返回_zid，set表示handlers中对应的handler数组
+
+    //~~~  非one类型 (dom, 'click', undefined, fn, undefined, undefined)
     var id = zid(element), set = (handlers[id] || (handlers[id] = []))
-    //  
+    //~~~  将字符串'click tap'转换成['click', 'tap']
     events.split(/\s/).forEach(function(event){
-      //  如果是ready事件，就在document上注册ready事件
-      if (event == 'ready') return $(document).ready(fn)
-      //  解析event，返回handler
+      //  ~~~如果是ready事件，就在document上注册ready事件
+      if (event == 'ready') {
+        return $(document).ready(fn)
+      }
+      
+      //~~~  解析event，返回{e: "tap", ns: "message modal"}
       var handler   = parse(event)
-      //  把回调函数和选择器挂载在handler上
+
+      //~~~  把回调函数和选择器挂载在handler上
+      //~~~  {e:"tap", ns:"message modal", fn:f(), sel:undefined}  
       handler.fn    = fn
       handler.sel   = selector
 
-      // 如果要注册的事件是mouseenter或者mouseleave，则用mouseover或者mouseout替代
+      //~~~  如果要注册的事件是mouseenter或者mouseleave，则用mouseover或者mouseout替代
+      //~~~  e在{ mouseenter: 'mouseover', mouseleave: 'mouseout' }中的话
       if (handler.e in hover) fn = function(e){
         //  获取事件对象的relatedTarget属性
         var related = e.relatedTarget
@@ -1172,11 +1194,15 @@ window.$ === undefined && (window.$ = Zepto)
   }
 
 
-  //  on函数是注册事件的常用函数
-  //  
+  //~~~  on函数是注册事件的常用函数
+  //~~~  -  事件类型
+  //~~~  -  回调函数
+  //~~~  -  data, callback, one这3个参数主要针对一次绑定的，其他的方法只需要event, selector
   $.fn.on = function(event, selector, data, callback, one){
 
     var autoRemove, delegator, $this = this
+
+    //  ????????????????????????????????????????
     if (event && !isString(event)) {
       $.each(event, function(type, fn){
         $this.on(type, selector, data, fn, one)
@@ -1184,14 +1210,25 @@ window.$ === undefined && (window.$ = Zepto)
       return $this
     }
 
-    if (!isString(selector) && !isFunction(callback) && callback !== false)
+    //  selector不是string，callback不是funtion，callback不是false
+    if (!isString(selector) && !isFunction(callback) && callback !== false) {
+      //  ('click', undefined, fn, undefined, undefined)
       callback = data, data = selector, selector = undefined
-    if (callback === undefined || data === false)
+    }
+    
+    if (callback === undefined || data === false) {
       callback = data, data = undefined
+    }
+      
+    if (callback === false) {
+      callback = returnFalse
+    }
 
-    if (callback === false) callback = returnFalse
-
+    //  $this要在函数被调用的时候才能知道是什么
+    //  Zepto('#d5') 
+    //  $this结构 [dom1, dom2.., length, selector]
     return $this.each(function(_, element){
+      
       if (one) autoRemove = function(e){
         remove(element, e.type, callback)
         return callback.apply(this, arguments)
@@ -1204,7 +1241,7 @@ window.$ === undefined && (window.$ = Zepto)
           return (autoRemove || callback).apply(match, [evt].concat(slice.call(arguments, 1)))
         }
       }
-
+      // 非one类型 (dom, 'click', undefined, fn, undefined, undefined)
       add(element, event, callback, data, selector, delegator || autoRemove)
     })
   }

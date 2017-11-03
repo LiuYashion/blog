@@ -67,15 +67,22 @@
     unregisterTouchEvents()
 
     eventMap = (__eventMap && ('down' in __eventMap)) ? __eventMap :
-      ('ontouchstart' in document ?
-      { 'down': 'touchstart', 'up': 'touchend',
-        'move': 'touchmove', 'cancel': 'touchcancel' } :
-      'onpointerdown' in document ?
-      { 'down': 'pointerdown', 'up': 'pointerup',
-        'move': 'pointermove', 'cancel': 'pointercancel' } :
-       'onmspointerdown' in document ?
-      { 'down': 'MSPointerDown', 'up': 'MSPointerUp',
-        'move': 'MSPointerMove', 'cancel': 'MSPointerCancel' } : false)
+      ('ontouchstart' in document ? { 
+        'down':   'touchstart', 
+        'up':     'touchend',
+        'move':   'touchmove', 
+        'cancel': 'touchcancel' 
+      } : 'onpointerdown' in document ? { 
+        'down':   'pointerdown', 
+        'up':     'pointerup',
+        'move':   'pointermove', 
+        'cancel': 'pointercancel'
+      } : 'onmspointerdown' in document ? { 
+        'down':   'MSPointerDown', 
+        'up':     'MSPointerUp',
+        'move':   'MSPointerMove', 
+        'cancel': 'MSPointerCancel' 
+      } : false)
 
     // No API availables for touch events
     if (!eventMap) return
