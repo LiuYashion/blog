@@ -976,7 +976,7 @@ window.$ === undefined && (window.$ = Zepto)
 
 //  事件模块
 ;(function($){
-  
+ 
   //~~~ 首先声明一些必要参数
   var _zid = 1, 
     undefined,
@@ -1237,8 +1237,7 @@ window.$ === undefined && (window.$ = Zepto)
   $.fn.on = function(event, selector, data, callback, one){
     
     var autoRemove, delegator, $this = this
-
-
+    
     //  ????????????????????????????????????????
     if (event && !isString(event)) {
       $.each(event, function(type, fn){
