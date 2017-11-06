@@ -1055,12 +1055,12 @@ window.$ === undefined && (window.$ = Zepto)
       
       //~~~  解析event，返回{e: "tap", ns: "message modal"}
       var handler   = parse(event)
-
+      
       //~~~  把回调函数和选择器挂载在handler上
       //~~~  {e:"tap", ns:"message modal", fn:f(), sel:undefined}  
       handler.fn    = fn
       handler.sel   = selector
-
+      console.log(handler)
       //~~~  如果要注册的事件是mouseenter或者mouseleave，则用mouseover或者mouseout替代
       //~~~  e在{ mouseenter: 'mouseover', mouseleave: 'mouseout' }中的话
       if (handler.e in hover) fn = function(e){
