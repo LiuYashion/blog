@@ -42,11 +42,79 @@ class Container extends React.component {
 
 - action
 描述改变应用状态的方法
+```js
+{
+  type: 'INCREMENT',
+  value: 1
+}
+```
 
 - reducer
 根据现在的状态，返回一个新的状态
+```js
+function counter(state = 0, action) {
+  switch (action.type) {
+    case 'INCREMENT':
+      return state + action.value
+    default:
+      return state
+  }
+}
+```
 
 - store
 存储状态
+```js
+const { createStore } = Redux;
+const store = createStore(counter);
+```
+
+### react-redux
+- Provider：为react传入store的组件
+- connect：为组件提供dispatch和状态数据
+- mapStateToProps：将redux中的状态数据映射到react
+```js
+const { Provider, connect } = ReactRedux;
+const mapStateToProps = state => ({
+  number: state
+});
 
 
+class Counter extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  handleClick() {
+    // 在这里调用传入组件的 dispatch 方法
+    this.props.dispatch({
+      type: 'INCREMENT',
+      value: 1
+    });
+  }
+
+  render() {
+    return (
+      <div>
+        <Title />
+        <Number number={this.props.number} />
+        <Button onClick={() => this.handleClick()} />
+      </div>
+    )
+  }
+}
+/* 我们需要通过 connect 方法来包装一下 React 的 Counter 组件，使其获取到 Redux 的 store 当中的方法和数据 */
+Counter = connect(mapStateToProps)(Counter);
+```
+
+### react-router
+```js
+<HashRouter>
+    <div>
+      <Route path='/:title?' component={App} />
+    </div>
+</HashRouter>
+
+```
+
+### 实录
