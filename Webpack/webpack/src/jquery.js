@@ -1,2 +1,2 @@
 require('./tools.js')
-console.log(22)
+console.log(33)
