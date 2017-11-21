@@ -1,2 +1,1 @@
-require('./tools.js')
-console.log(33)
+console.log('jquery.js')

@@ -60,24 +60,42 @@
 /******/ 	__webpack_require__.p = "/dist/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 6);
+/******/ 	return __webpack_require__(__webpack_require__.s = 4);
 /******/ })
 /************************************************************************/
-/******/ ({
+/******/ ([
+/* 0 */
+/***/ (function(module, exports) {
 
-/***/ 1:
+console.log('chunk2.js')
+
+
+/***/ }),
+/* 1 */
 /***/ (function(module, exports) {
 
 console.log('jquery.js')
 
 /***/ }),
-
-/***/ 6:
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(1);
+__webpack_require__(0)
+
+console.log('chunk1.js')
+
+/***/ }),
+/* 3 */,
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(1)
+__webpack_require__(2)
+__webpack_require__(0)
+
+console.log('I am index1')
+
 
 
 /***/ })
-
-/******/ });
+/******/ ]);
