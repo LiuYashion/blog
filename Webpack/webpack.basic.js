@@ -162,50 +162,40 @@ module.exports = {
 
 /**
  * externals
+ * 通过配置externals，我们将依赖的库配置到全局变量，从而不再打包这个库。
+ * 比如jquery，我们在html模板中引入了cdn
+ * 在项目中直接使用require('jquery')就行了。
  */
-
 module.exports = {
   externals:{
-    jquery: 'window.jQuery',
+    jquery: 'window.jQuery'
   }
 }
 
-通过配置externals，我们将依赖的库配置到全局变量，从而不再打包这个库。
-比如jquery，我们在html模板中引入了cdn，
-在项目中直接使用require('jquery')就行了。
 
-
-
----
-### resolve
-```javascript
-resolve:{
-  modules: [ 'node_modules', path.resolve(__dirname, 'src') ],
-  extensions: ['.web.js', '.js', '.jsx', '.es6', '.json'],
-  alias: {
-    app: path.resolve(__dirname,'src/js'),
-    style: path.resolve(__dirname,'src/styles')
+/**
+ * resolve
+ * resolve用于告知webpack自己定制的某些解析细节
+ * modules:     定义webpack解析模块时的搜索目录
+ * extensions:  定义文件默认拓展名，引入文件时可以不带拓展
+ * alias:       给import和require创建别名，使得引入文件变得更加简单，（别名只能在js文件中使用）
+ */
+module.exports = {
+  resolve:{
+    modules: [ 'node_modules', path.resolve(__dirname, 'src') ],
+    extensions: ['.web.js', '.js', '.jsx', '.es6', '.json'],
+    alias: {
+      app: path.resolve(__dirname,'src/js'),
+      style: path.resolve(__dirname,'src/styles')
+    }
   }
-},
-```
-resolve用于告知webpack自己定制的某些解析细节
-- alias
-
-  给import和require创建别名，使得引入文件变得更加简单，（别名只能在js文件中使用）
-- extensions
-
-  定义文件默认拓展名，引入文件时可以不带拓展
-- modules
-
-  定义webpack解析模块时的搜索目录
+}
 
 
-
----
-### plugins
-插件提供了一些额外的功能，帮助我们完成打包优化
-```javascript
-
+/**
+ * plugins
+ * 插件提供了一些额外的功能，帮助我们完成打包优化
+ */
 const UglifyJSPlugin        = require('uglifyjs-webpack-plugin')
 const CleanWebpackPlugin    = require("clean-webpack-plugin");
 const ExtractTextPlugin     = require('extract-text-webpack-plugin');
@@ -214,7 +204,8 @@ const HtmlWebpackPlugin     = require('html-webpack-plugin');
 const OptimizeCSSPlugin     = require('optimize-css-assets-webpack-plugin');
 const PostCss               = require('./postcss.config.js')
 
-plugins: [
+module.exports = {
+  plugins: [
     new UglifyJSPlugin(),
     // 压缩js的插件
 
@@ -263,6 +254,9 @@ plugins: [
 
     new ExtractTextPlugin('styles.[contenthash].css')
     // 将css单独抽出来打包，用到的css全部被放在一个文件里
-]
-```
+  ]
+}
+
+
+
 
