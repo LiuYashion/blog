@@ -237,18 +237,18 @@ module.exports = {
     new webpack.optimize.CommonsChunkPlugin({
         name: 'commons',     
         filename: '[name]/bundle.[hash].js',
-        minChunks: 4,
+        minChunks: 4
     }),
     // 提取公共chunk的插件，超过4个地方引用了某文件后，就会把这个文件单独打包
 
     new HtmlWebpackPlugin({
         title:'开发模式',
-        filename: `.[name]/index.html`,
+        filename: `./index.html`,
         template: `./index.html`,
-        chunks: ['webpack-runtime', 'commons', 'index', 'entry1'],
+        chunks: ['webpack-runtime', 'commons'],
         inject: 'body',
         hash: true, 
-        xhtml: true,
+        xhtml: true
     }), 
     // 生成html的插件，帮助给模板加入js和css引用。chunk中引用的对应的是entry对象中的key，多页面应用中可以使用，单页面应用不需写chunks，默认会引入js和css
 

@@ -1,30 +1,41 @@
-var CommonsChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin");
+const CommonsChunkPlugin  = require("webpack/lib/optimize/CommonsChunkPlugin");
+const HtmlWebpackPlugin   = require('html-webpack-plugin');
 var path = require('path')
 
 module.exports = {
     context: path.resolve(__dirname, './src'),
     entry: {
-        main1: './main1.js',
-        main2: './main2.js',
-        common1: ['./jquery'],  
-        common2: ['./vue']
+        main1: './main1.js'
     },
     output: {
         path: path.resolve(__dirname, './build'),
-        publicPath: "/dist/",
+        publicPath: "/build/",
         filename: '[name].js'
     },
     plugins: [
-        // new CommonsChunkPlugin({
-        //     name: ['chunk', 'common1', 'common2'],
-        //     minChunks: 2
-        // })
         new CommonsChunkPlugin({
             name:'webpack-runtime',
-            chunks: [ 'common1', 'common2'],
             minChunks: 2
+        }),
+        new HtmlWebpackPlugin({
+            title:'开发模式',
+            filename: `./result.html`,
+            template: `./index.html`,
+            chunks: ['webpack-runtime'],
+            inject: 'body',
+            hash: true, 
+            xhtml: true
         })
-    ]
+    ],
+    // devServer:{
+    //   contentBase: './build/',
+    //   host: 'localhost',
+    //   port: 8081,         // 默认8080
+    //   inline: true,       // 可以监控js变化
+    //   hot: true,          // 热启动
+    //   compress: true,
+    //   watchContentBase: false,
+    // }
 };
 
 //  CommonsChunkPlugin的names不是瞎写的
