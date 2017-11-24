@@ -18,24 +18,21 @@ module.exports = {
             minChunks: 2
         }),
         new HtmlWebpackPlugin({
-            title:'开发模式',
-            filename: `./result.html`,
-            template: `./index.html`,
-            chunks: ['webpack-runtime'],
-            inject: 'body',
-            hash: true, 
-            xhtml: true
+            title:'开发模式'
         })
     ],
-    // devServer:{
-    //   contentBase: './build/',
-    //   host: 'localhost',
-    //   port: 8081,         // 默认8080
-    //   inline: true,       // 可以监控js变化
-    //   hot: true,          // 热启动
-    //   compress: true,
-    //   watchContentBase: false,
-    // }
+    devServer:{
+      contentBase: './build/',
+      inline: true,       // 可以监控js变化
+      hot: true,          // 热启动
+      proxy: {
+        '/qqagent': {
+          target: 'https://qq-ci.crfchina.com/',
+          secure: false,
+          changeOrigin: true
+        }
+      }
+    }
 };
 
 //  CommonsChunkPlugin的names不是瞎写的
