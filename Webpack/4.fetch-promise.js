@@ -24,7 +24,7 @@ fetch('/qqagent/baseRqt/repay_succ_detail', {
 
 /**
  * 【header】
- * 在我们获得请求体后，可以获取header
+ *  附带的一些控制信息，可以在我们获得请求体后获取header，也可以在请求前发送
  */
 
 //  1.复写header
@@ -42,7 +42,7 @@ fetch().then((response)=>{
 
 /**
  * 【response】
- * 最佳实践先判断一下，常用的response属性如下
+ *  response是fetch在处理完promise之后返回的一个对象
  */
 var status      = response.status       //  状态码
 var statusText  = response.statusText   //  默认ok
@@ -64,7 +64,9 @@ fetch().then((response)=>{
 
 /**
  * 【body】
- * response可以调用下面这些方法
+ *  body是request/response所包含的一个对象
+ *  request/response实现了下面这些方法
+ *  这些方法都会返回一个被解析后的promise对象和数据
  * 
  */
 fetch().then((response)=>{

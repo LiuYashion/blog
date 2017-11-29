@@ -10,7 +10,7 @@ var packageJson = {
 /**
  * proxy:
  * 
- * contentBase
+ * contentBase: 跟输出html
  */
 module.exports = {
   devServer:{
