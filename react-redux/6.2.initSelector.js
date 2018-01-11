@@ -114,7 +114,7 @@ this.selector.run(this.props)
 /** 实际调用 */
 function runComponentSelector(props) {
   try {
-    //  这里就是比较了props和state,并且整合
+    //  这里就是比较了props和state,并且整合。如果是第一次就只是对state和props赋值
     const nextProps = sourceSelector(store.getState(), props)
     if (nextProps !== selector.props || selector.error) {
       selector.shouldComponentUpdate = true

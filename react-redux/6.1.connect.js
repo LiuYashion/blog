@@ -126,17 +126,94 @@ TIP(info结果: selector根据props和state被附上了不同的属性){}
 /** END */
 
 
+/***************************************************************************************/
+
+/** 回到这里, 按照生命周期调用 */
+/** 代码 */
+componentDidMount() {
+  // 1.生成unsubscribe 2.生成listeners
+  this.subscription.trySubscribe()
+  // 1.和最近一次的props比较，并设置selector的属性
+  this.selector.run(this.props)
+  if (this.selector.shouldComponentUpdate) this.forceUpdate()
+}
+/** 帮助 */
+/** 实际调用 */
+/**
+/** END */
+
+
+
+
+
+
+
+
+
 
 
 /** 回到这里, 按照生命周期调用 */
 /** 代码 */
 componentDidMount() {
+  // 1.生成unsubscribe 2.生成listeners
+  this.subscription.trySubscribe()
+  // 1.和最近一次的props比较，并设置selector的属性
+  this.selector.run(this.props)
+  // 1.第一次调用会更新
+  if (this.selector.shouldComponentUpdate) this.forceUpdate()
+}
+/** 帮助 */
+/** 实际调用 */
+/**
+/** END */
+
+
+
+
+
+
+/** 当store中dispatch，导致store中的state改变，执行onStateChange */
+/** 代码 */
+onStateChange() {
+  //  <App/>上面的props 
+  this.selector.run(this.props)
+
+  if (!this.selector.shouldComponentUpdate) {
+    //不需要更新
+    this.notifyNestedSubs()
+  } else {
+    //需要更新，就在更新后调用this.notifyNestedSubs()
+    this.componentDidUpdate = this.notifyNestedSubsOnComponentDidUpdate
+    this.setState(dummyState)
+  }
+}
+
+this.notifyNestedSubs() 
+// 这个方法即：调用listen里面所有的方法
+// listener里面存放的是addNestedSub(listener)传入的listener
+/** 帮助 */
+/** 实际调用 */
+/**
+/** END */
+
+
+
+
+
+/** 当store中dispatch，导致store中的state改变，执行onStateChange */
+/** 代码 */
+componentDidMount() {
+  if (!shouldHandleStateChanges) return
+
   this.subscription.trySubscribe()
   this.selector.run(this.props)
   if (this.selector.shouldComponentUpdate) this.forceUpdate()
 }
+componentWillReceiveProps(nextProps) {
+  this.selector.run(nextProps)
+}
+//........................................
 /** 帮助 */
-TIP(info){}
 /** 实际调用 */
 /**
 /** END */

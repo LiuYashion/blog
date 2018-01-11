@@ -92,7 +92,10 @@ export default class Subscription {
     return Boolean(this.unsubscribe)
   }
 
-  //  订阅
+  /**
+   * 1.生成解除订阅 
+   * 2.生成listeners
+   */
   trySubscribe() {
     if (!this.unsubscribe) {
 
@@ -112,6 +115,7 @@ export default class Subscription {
        * 就是返回一个对象
        * 它能够保存监听函数,同意调用函数
        */
+      
       this.listeners = createListenerCollection()
     }
   }
