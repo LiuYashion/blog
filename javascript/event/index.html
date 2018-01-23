@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Sample App</title>
+  </head>
+  <body>
+    <a href="http://www.baidu.com/">百度</a>
+  </body>
+  <script>
+
+    window.addEventListener('hashchange', ()=>{
+      console.log('goback callback')
+    }, false)
+
+    history.pushState({}, '', '#/page=1')
+
+  </script>
+  
+</html>  
