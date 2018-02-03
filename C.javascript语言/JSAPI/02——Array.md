@@ -5,7 +5,7 @@ var array = ['a', 'b', 'c']
 for(let item of array){
   console.log(item)
 }
-```
+``` 
 
 # 循环
 ## forEach
