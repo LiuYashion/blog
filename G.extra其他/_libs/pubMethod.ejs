@@ -1,0 +1,37 @@
+
+let PublicMethod = {
+  returnURLData: function(){
+    let localHref = location.href;
+    return localHref.substring(localHref.indexOf('?') + 1);
+  },
+  returnParam: function(key){
+    let urlSearch = location.search;
+    let urlParaArr = [];
+    if (urlSearch != ''){
+      urlSearch = urlSearch.substring(1)
+    } else {
+      let urlHref = location.href
+      urlSearch = urlHref.substring(urlHref.indexOf('?') + 1)
+    }
+    urlParaArr = urlSearch.match(new RegExp("(^|&)" + key + "=([^&]*)(&|$)"));
+    return urlParaArr && urlParaArr[2];
+  },
+  returnID: function(){
+    const name = 'ssoID'
+    return this.returnParam(name)
+  },
+  isWeChat: function(){
+    const ua = window.navigator.userAgent.toLowerCase()
+    return ua.match(/mozilla\/5.0/)
+  },
+  random32word: function () {
+    let str = '';
+    let arr = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+
+    for (let i=0; i < 32; i++) {
+      str += arr[parseInt(Math.random() * arr.length)];
+    }
+
+    return str;
+  },
+}
