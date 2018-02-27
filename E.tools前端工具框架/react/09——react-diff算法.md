@@ -47,5 +47,11 @@ React diff 提供了三种节点操作，分别为：INSERT_MARKUP（插入）�
 - 子树渲染
 当组件调用setState时，react将重建其子节点的虚拟dom。所以我们一般不在根节点调用该方法
 
+- 选择子树渲染
+我们可以手动防止一些子树渲染
+```js
+shouldComponentUpdate(object nextProps, object nextState)
+```
+使用了这个方法，就涉及到javascript对象的比较（深比较和浅比较），在性能达到瓶颈的时候才使用这个方法
 
 
