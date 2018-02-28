@@ -1,0 +1,58 @@
+<head>    
+  <title>网页换肤</title>    
+  <meta http-equiv="Content-Type" content="text/html" ; charset="UTF-8">    
+  <link id="myCss" href="orange.css" rel="stylesheet">    
+  <script language="javascript">  
+
+
+
+  //写入客户端Cookie    
+  function writeCookie(csspath) {    
+    var today = new Date();    
+    var expires = new Date();    
+    expires.setTime(today.getTime() + 1000 * 60 * 60 * 24 * 30); //有效期为30天    
+    var str = "cssPath=" + csspath + ";expires=" + expires.toGMTString()    
+    + ";";    
+    document.cookie = str;    
+  }   
+
+  
+   
+  //读取Cookie    
+  function readCookie(cookieName) {    
+    var search = cookieName + "=";    
+    if (document.cookie.length > 0) {    
+      offset = document.cookie.indexOf(search);    
+      if (offset != -1) {    
+        offset += search.length;    
+        end = document.cookie.indexOf(";", offset);    
+        if (end == -1) {    
+          end = document.cookie.length;    
+          return unescape(document.cookie.substring(offset, end));    
+        }    
+      }    
+    }    
+  }    
+
+  function ifCookie() {    
+    if (readCookie("cssPath") == undefined) {    
+      writeCookie("orange.css");    
+    }    
+    document.getElementById("myCss").href = readCookie("cssPath");    
+  }  
+
+  function change(type) {    
+    if (type == "orange") {    
+      document.getElementById("myCss").href = "orange.css";    
+      writeCookie("orange.css");    
+    }    
+    if (type == "gray") {    
+      document.getElementById("myCss").href = "gray.css";    
+      writeCookie("gray.css");    
+    }    
+  }  
+
+
+
+  </script>    
+  </head>

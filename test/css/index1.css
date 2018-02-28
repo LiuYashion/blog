@@ -1,0 +1,64 @@
+.mui-content {
+  position: absolute;
+  top: 0; }
+
+#infor-content {
+  height: 15.625rem;
+  padding-top: 6.843rem; }
+  #infor-content #authorize_logo {
+    background: url(../images/authorize/authorize_confirm.png) no-repeat;
+    background-size: contain;
+    width: 3.84rem;
+    height: 4.4375rem;
+    margin: 0 auto; }
+  #infor-content #authorize_info {
+    width: 19rem;
+    margin: 0 auto;
+    margin-top: 0.781rem;
+    text-align: center;
+    line-height: 1.593rem; }
+
+#button_group {
+  margin-top: 4.218rem; }
+  #button_group #authorize_yes {
+    border: #0baae4; }
+  #button_group #authorize_no {
+    border: white;
+    color: #0baae4; }
+
+#success_logo {
+  width: 4.218rem;
+  height: 4.218rem;
+  margin: 0 auto;
+  background: url(../images/authorize/authorize_success.png) no-repeat;
+  background-size: contain; }
+
+#success_info1 {
+  margin: 0 auto;
+  margin-top: 1.125rem;
+  text-align: center;
+  line-height: 1.75rem; }
+
+#success_info2 {
+  margin: 0 auto;
+  width: 17rem;
+  word-break: break-all;
+  text-align: justify;
+  word-wrap: break-word;
+  line-height: 1.75rem;
+  font-family: "microsoft yahei"; }
+
+#apply_instant {
+  margin-top: 1.468rem; }
+
+#failed_logo {
+  width: 4.218rem;
+  height: 4.218rem;
+  margin: 0 auto;
+  background: url(../images/authorize/authorize_failed.png) no-repeat;
+  background-size: contain; }
+
+#user_count {
+  color: #ff6f00; }
+
+/*# sourceMappingURL=authorize.css.map */
