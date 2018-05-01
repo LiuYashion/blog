@@ -1,8 +1,12 @@
 ## vuex
 vuex是一个vue的状态管理工具
 
+
+
+
+
 ## demo
-store使用方法
+- 在项目中注册store
 ```js
 import 'babel-polyfill'
 import Vue from 'vue'
@@ -18,8 +22,13 @@ new Vue({
 
 
 
+
+
 ## store
-- 在vuex中注册方法，
+- 在vuex中注册state：注册state
+- 在vuex中注册getters：获取state
+- 在vuex中注册actions：用来commit
+- 在vuex中注册mutations：处理commit
 ```js
 import Vue from 'vue'
 import Vuex from 'vuex'
@@ -29,7 +38,6 @@ Vue.use(Vuex)
 const state = {
   count: 0
 }
-
 const mutations = {
   increment (state) {
     state.count++
@@ -38,7 +46,6 @@ const mutations = {
     state.count--
   }
 }
-
 const actions = {
   increment: ({ commit }) => commit('increment'),
   decrement: ({ commit }) => commit('decrement'),
@@ -56,7 +63,6 @@ const actions = {
     })
   }
 }
-
 const getters = {
   evenOrOdd: state => state.count % 2 === 0 ? 'even' : 'odd'
 }
@@ -87,7 +93,6 @@ export default new Vuex.Store({
 </template>
 
 <script>
-
 import { mapGetters, mapActions } from 'vuex'
 export default {
   computed: mapGetters([
