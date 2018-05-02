@@ -222,6 +222,7 @@ const HtmlWebpackPlugin     = require('html-webpack-plugin');
 const OptimizeCSSPlugin     = require('optimize-css-assets-webpack-plugin');
 const PostCss               = require('./postcss.config.js')
 
+
 plugins: [
     new UglifyJSPlugin(),
     // 压缩js的插件
