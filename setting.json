@@ -1,0 +1,40 @@
+
+{
+  "fileheader.Author": "LiuYaXiong",
+  "fileheader.LastModifiedBy": "LiuYaXiong",
+  "workbench.iconTheme": "eq-material-theme-icons",
+  "docthis.includeDescriptionTag": true,
+  "material-icon-theme.showUpdateMessage": false,
+  "editor.fontSize": 14,
+  "editor.fontFamily": "Consolas, Microsoft YaHei",
+  "editor.detectIndentation": false,
+  "window.zoomLevel": 0,
+  "markdown.preview.fontSize": 15,
+  "markdown.preview.fontFamily": "Consolas, Microsoft YaHei",
+  "extensions.ignoreRecommendations": true,
+  "editor.tabSize": 2,
+  "files.associations": {
+    "*.html": "html",
+    "*.ejs": "javascript",
+    "*.js": "javascript"
+  },
+  "terminal.integrated.fontSize": 16,
+  "editor.suggestFontSize": 17,
+  "explorer.confirmDragAndDrop": false,
+  "markdown.styles": [],
+  "workbench.colorTheme": "One Dark Pro",
+  "explorer.confirmDelete": false,
+  "todohighlight.keywords": [{
+    "text": "TITLE:",
+    "backgroundColor": "rgba(0,0,0,0)",
+    "color": "#f72939"
+  },{
+    "text": "INTRO:",
+    "backgroundColor": "rgba(0,0,0,0)",
+    "color": "#3bcbff"
+  },{
+    "text": "DETIAL:",
+    "backgroundColor": "rgba(0,0,0,0)",
+    "color": "#ffc13f"
+  }]
+}
