@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui">
+    <meta name="screen-orientation" content="portrait"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="full-screen" content="yes">
+    <meta name="x5-fullscreen" content="true">
+    <title>lyx</title>
+  </head>
+  <body>
+    
+  </body>
+  <script>
+  
+    var res = [
+      {
+        "planPropertyName":"AMOUNT_UNIT",
+        "propertyValues":"100000",
+        "planPropertyDesc":"出借金额单元"
+      },{
+        "planPropertyName":"CLEARING_FORM",
+        "propertyValues":"1",
+        "planPropertyDesc":"结算方式"
+      },{
+        "planPropertyName":"CURRENT_ANNUALIZED_YIELD_EXPLA",
+        "propertyValues":"7.01%（基于历史表现，本金和收益循环复投一年的测算数据，不视为承诺收益。）<br />实际收益以最终结算支付为准。","planPropertyDesc":"期望年化收益率"},{"planPropertyName":"EXIT_WAY_DESC","propertyValues":"确认出借日的90个自然日后，客户方可申请以债权转让方式提前收回资金。<br />信而富仅协助办理相关手续，不保证该退出申请的实现。","planPropertyDesc":"提前退出方式"},{"planPropertyName":"HIGHEST_RATE","propertyValues":"7.21","planPropertyDesc":"最高收益率"},{"planPropertyName":"IS_CUSTOMIZE","propertyValues":"1","planPropertyDesc":"是否可通过专属定制购买"},{"planPropertyName":"IS_NEW_BIE","propertyValues":"0","planPropertyDesc":"是否新手出借方案"},{"planPropertyName":"IS_TRANSFER","propertyValues":"1","planPropertyDesc":"是否可通过可转投购买"},{"planPropertyName":"LEND_AMOUNT_DESC","propertyValues":"人民币1000元起，出借金额为1000元的整数倍","planPropertyDesc":"出借金额"},{"planPropertyName":"LEND_WAY","propertyValues":"一次性出借一定金额给一位或多位项目借款人","planPropertyDesc":"出借方式"},{"planPropertyName":"MAX_INVEST_AMOUNT","propertyValues":"2000000000","planPropertyDesc":"最高出借额"},{"planPropertyName":"MINIMUM_YIELD","propertyValues":"6.81","planPropertyDesc":"最低收益率"},{"planPropertyName":"MIN_INVEST_AMOUNT","propertyValues":"100000","planPropertyDesc":"最低出借额"},{"planPropertyName":"PLAN_MATURITY_DATE","propertyValues":"2018年06月15日","planPropertyDesc":"计划到期日"},{"planPropertyName":"PRODUCT_TYPE","propertyValues":"1","planPropertyDesc":"产品类型"},{"planPropertyName":"PROFIT_HANDLE_WAY_DESC","propertyValues":"到期后统一结算支付","planPropertyDesc":"收益支付方式"},{"planPropertyName":"PROFIT_START_TIME_DESC","propertyValues":"申请加入的次日，登记并确认出借意向。完成登记后的次日，开始计息。","planPropertyDesc":"计息开始日"},{"planPropertyName":"PUBLISH_PLAT","propertyValues":"WEB|H5|","planPropertyDesc":"发售平台"},{"planPropertyName":"RISK_BALANCE_STRATEGY","propertyValues":"出借人将与协议约定的同类出借人共同建立协议合作关系，对其出借资金及其名下匹配的借贷关系所产生的收益和风险，共同承担风险和共同分享收益，并委托信而富进行核对和计算。","planPropertyDesc":"风险平衡策略"},{"planPropertyName":"RISK_TIPS_DESC","propertyValues":"出借人按照约定将资金出借给借款人使用，在借款人不主动提前还款的情况下，借款人将按照约定的期限偿还出借人的本金和利息，出借人的出借资金的回收需要一定的周期。<br />同时，在出借计划标明的可转让日期前，出借人将不能通过债权转让的方式提前收回资金，且在申请转让时也可能会因为找不到合适的受让人导致债权无法转让，因此出借人将面临无法转让债权、出借资金不能收回的流动性风险。","planPropertyDesc":"流动性风险提示"},{"planPropertyName":"SETTLEMENT_PAYMENT_DAY","propertyValues":"方案到期日之后的第3个工作日（如遇法定节假日顺延）","planPropertyDesc":"结算支付日"}]
+    var target = {}
+
+
+
+    res.map(item => {
+      target[item.planPropertyName] = item
+    })
+  
+    console.log(target)
+  
+  </script>
+</html>
