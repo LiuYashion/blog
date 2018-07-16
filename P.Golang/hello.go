@@ -1,11 +1,45 @@
 package main
-
+ 
 import (
 	"fmt"
 )
 
+/** 接口 */
+type USB interface {
+	Name() string
+	Connector
+}
+type Connector interface {
+	Connect()
+}
+
+/** 结构 */
+type PhoneConnect struct {
+	name string
+}
+
+/** 方法 */
+func (pc PhoneConnect) Name() string {
+	return pc.name
+}
+func (pc PhoneConnect) Connect() {
+	fmt.Println("Connect:", pc.name)
+}
+
+
 func main() {
-	a1 := [10]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 0}
-	s1 := a1[5:]
-	fmt.Println(s1)
+	a := PhoneConnect{"XConnect"}
+	a.Connect()
+	
+	// Disconnect(a)
+}
+
+/** 方法, 参数是接口 */
+func Disconnect(usb USB) {
+	switch usb.(type) {
+	case PhoneConnect:
+		fmt.Println("Disconnected:", usb)
+	default:
+		fmt.Println("Unknown:", usb)
+	}
 }
