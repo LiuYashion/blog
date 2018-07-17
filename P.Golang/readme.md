@@ -155,3 +155,193 @@ fmt.Println(s1)
 ```go
 
 ```
+
+/////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////
+
+### 函数
+
+- Go 函数不支持嵌套 重载 默认参数
+- Go 支持闭包
+- 注意声明结构
+
+```go
+func main() {
+	f := closure(10)
+	fmt.Println(f(1))
+	fmt.Println(f(2))
+}
+
+func closure(x int) (func(int) (int)) {
+	fmt.Println("%p\n", &x)
+	return func(y int) (int) {
+		fmt.Println("%p\n", &x)
+		return x + y
+	}
+}
+```
+
+### defer
+
+- 类似于析构函数,在##函数体##执行结束后按照调用顺序的相反顺序逐个执行
+
+```go
+func main() {
+	fmt.Println("a")
+	defer fmt.Println("b")
+	defer fmt.Println("c")
+}
+```
+
+### 异常处理
+
+- panic
+- recover 必须在 defer 执行的函数里执行
+
+```go
+func main() {
+	var fs = [4]func(){}
+
+	for i:=0; i<4; i++ {
+    //  值传递
+		defer fmt.Println("defer i = ", i)
+
+    //  引用传递
+		defer func(){
+			fmt.Println("defer closure i = ", i)
+		}()
+
+    //  引用传递
+		fs[i] = func(){
+			fmt.Println("closure i = ", i)
+		}
+	}
+
+	for _, f := range fs {
+    //  等到执行的时候,i已经变成了4
+		f()
+	}
+}
+
+// closure i =  4
+// closure i =  4
+// closure i =  4
+// closure i =  4
+// defer closure i =  4
+// defer i =  3
+// defer closure i =  4
+// defer i =  2
+// defer closure i =  4
+// defer i =  1
+// defer closure i =  4
+// defer i =  0
+```
+
+### struce 结构
+
+- 没有 class 的继承功能
+
+```go
+type person struct {
+	Name 	string
+}
+
+func main() {
+	a := &person{
+		Name: "Nemoro",
+	}
+	fmt.Println("before: ", a)
+	rewrite(a)
+	fmt.Println("after:  ", a)
+}
+
+func rewrite(per *person){
+	per.Name = "Clay"
+	fmt.Println("      : ", per)
+}
+
+// before:  &{Nemoro}
+//       :  &{Clay}
+// after:   &{Clay}
+
+
+type person struct {
+	Name	string
+	Age 	int
+	Contact	struct {
+		Phone, City string
+	}
+}
+
+func main() {
+	a := person{
+		Name: "Clay",
+		Age: 18,
+	}
+}
+
+/////////////////
+type person struct {
+	string
+	int
+}
+
+func main() {
+	a := person{"Clay", 18}
+	fmt.Println(a)
+}
+```
+
+### 组合(伪继承)
+
+```go
+type human struct {
+	Sex int
+}
+
+type student struct {
+	human
+	Name string
+	Age int
+}
+
+func main() {
+	a := student{
+		Name: "lyx",
+		Age: 18,
+		human: human{
+			Sex: 1,
+		},
+	}
+	fmt.Println(a)
+}
+```
+
+### 方法 method
+
+- 方法可以访问对象的私有变量
+
+```go
+type Cat struct {
+	Kind string
+}
+
+type Dog struct {
+	Kind string
+}
+
+func main() {
+	lura := Cat{}
+  lura.Print()
+  (Cat).Print(lura)
+}
+
+func (lura Cat) Print(){
+	fmt.Println("funciton print")
+}
+```
+
+### 你可能要复习一下取地址符&和指针\*
+
+### 接口 interface

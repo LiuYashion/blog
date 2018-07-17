@@ -1,11 +1,11 @@
 package main
 
 import (
-	"fmt"
+	"github.com/jinzhu/gorm"
 )
 
+
 func main() {
-	a1 := [10]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 0}
-	s1 := a1[5:]
-	fmt.Println(s1)
+	db, err := gorm.Open("mysql", "xxxxx")
 }
+
